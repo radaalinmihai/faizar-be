@@ -1,0 +1,11 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "go: run watcher",
+			"command": "nodemon --watch '${fileDirname}\\**\\*.go' --signal SIGTERM --exec 'go' run ${file}",
+			"group": "build"
+		}
+	]
+}
