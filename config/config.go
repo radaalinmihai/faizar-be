@@ -15,7 +15,7 @@ type Config struct {
 	}
 }
 
-func loadConfig() Config {
+func LoadConfig() Config {
 	envConfig := Config{}
 	file, err := os.Open(".env")
 
