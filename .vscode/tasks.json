@@ -4,7 +4,12 @@
 		{
 			"type": "shell",
 			"label": "go: run watcher",
-			"command": "nodemon --watch '${fileDirname}\\**\\*.go' --signal SIGTERM --exec 'go env -w CGO_ENABLED=1 && go run ${file}'",
+			"linux": {
+				"command": "refresh run"
+			},
+			"windows": {
+				"command": "nodemon --watch '${fileDirname}\\**\\*.go' --signal SIGTERM --exec 'go env -w CGO_ENABLED=1 && go run ${file}'"
+			},
 			"group": "build"
 		}
 	]

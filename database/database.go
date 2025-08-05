@@ -3,7 +3,10 @@ package database
 import (
 	"be/config"
 	"be/database/entities"
+	"context"
 	"fmt"
+	"net/http"
+	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -12,7 +15,7 @@ import (
 func InitDatabase() {
 	db := GetDBConnection()
 
-	err := db.AutoMigrate(&entities.User{})
+	err := db.Debug().AutoMigrate(&entities.User{})
 
 	if err != nil {
 		panic(err)
@@ -27,4 +30,13 @@ func GetDBConnection() *gorm.DB {
 		panic(err)
 	}
 	return db
+}
+
+func SetDBMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		db := GetDBConnection()
+		timeoutContext, _ := context.WithTimeout(context.Background(), time.Second)
+		ctx := context.WithValue(r.Context(), "DB", db.WithContext(timeoutContext))
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
 }
